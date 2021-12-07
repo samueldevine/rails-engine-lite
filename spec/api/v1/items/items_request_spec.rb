@@ -85,12 +85,12 @@ RSpec.describe 'Items API' do
       it 'returns the created item' do
         merchant_id = create(:merchant).id
         item_params = {
-                        name: 'Key',
-                        description: 'Use this to open a door',
-                        unit_price: '100.0',
-                        merchant_id: merchant_id
-                      }
-        headers = {"CONTENT_TYPE" => "application/json"}
+          name: 'Key',
+          description: 'Use this to open a door',
+          unit_price: '100.0',
+          merchant_id: merchant_id
+        }
+        headers = { 'CONTENT_TYPE' => 'application/json' }
         post '/api/v1/items', headers: headers, params: JSON.generate(item: item_params)
         created_item = Item.last
 
@@ -106,11 +106,11 @@ RSpec.describe 'Items API' do
       it 'returns an error if any attributes are missing' do
         merchant_id = create(:merchant).id
         item_params = {
-                        name: 'Key',
-                        description: 'Use this to open a door',
-                        merchant_id: merchant_id
-                      }
-        headers = {"CONTENT_TYPE" => "application/json"}
+          name: 'Key',
+          description: 'Use this to open a door',
+          merchant_id: merchant_id
+        }
+        headers = { 'CONTENT_TYPE' => 'application/json' }
         post '/api/v1/items', headers: headers, params: JSON.generate(item: item_params)
 
         expect(response.status).to eq 400
@@ -119,13 +119,13 @@ RSpec.describe 'Items API' do
       it 'ignores attributes that are not allowed' do
         merchant_id = create(:merchant).id
         item_params = {
-                        name: 'Key',
-                        description: 'Use this to open a door',
-                        unit_price: '100.0',
-                        merchant_id: merchant_id,
-                        evil_hacker_params: 'l33t_h4ck3r_c0d3 u got pwned!!!!'
-                      }
-        headers = {"CONTENT_TYPE" => "application/json"}
+          name: 'Key',
+          description: 'Use this to open a door',
+          unit_price: '100.0',
+          merchant_id: merchant_id,
+          evil_hacker_params: 'l33t_h4ck3r_c0d3 u got pwned!!!!'
+        }
+        headers = { 'CONTENT_TYPE' => 'application/json' }
         post '/api/v1/items', headers: headers, params: JSON.generate(item: item_params)
         body = JSON.parse(response.body, symbolize_names: true)
 
@@ -143,9 +143,9 @@ RSpec.describe 'Items API' do
         item_params = {
           name: 'Key',
           description: 'Use this to open a door',
-          unit_price: '100.0',
+          unit_price: '100.0'
         }
-        headers = {"CONTENT_TYPE" => "application/json"}
+        headers = { 'CONTENT_TYPE' => 'application/json' }
         patch "/api/v1/items/#{id}", headers: headers, params: JSON.generate(item: item_params)
         updated_item = Item.find_by(id: id)
 
@@ -161,7 +161,7 @@ RSpec.describe 'Items API' do
       it 'returns the item if no updates are made' do
         item = create(:item)
         previous_name = item.name
-        headers = {"CONTENT_TYPE" => "application/json"}
+        headers = { 'CONTENT_TYPE' => 'application/json' }
         patch "/api/v1/items/#{item.id}", headers: headers, params: JSON.generate(item: { name: item.name })
 
         expect(response.status).to eq 200
@@ -177,7 +177,7 @@ RSpec.describe 'Items API' do
           unit_price: '100.0',
           evil_hacker_params: 'l33t_h4ck3r_c0d3 u got pwned!!!!'
         }
-        headers = {"CONTENT_TYPE" => "application/json"}
+        headers = { 'CONTENT_TYPE' => 'application/json' }
         patch "/api/v1/items/#{id}", headers: headers, params: JSON.generate(item: item_params)
         body = JSON.parse(response.body, symbolize_names: true)
 
@@ -192,8 +192,8 @@ RSpec.describe 'Items API' do
           unit_price: '100.0',
           evil_hacker_params: 'l33t_h4ck3r_c0d3 u got pwned!!!!'
         }
-        headers = {"CONTENT_TYPE" => "application/json"}
-        patch "/api/v1/items/89012458942389045", headers: headers, params: JSON.generate(item: item_params)
+        headers = { 'CONTENT_TYPE' => 'application/json' }
+        patch '/api/v1/items/89012458942389045', headers: headers, params: JSON.generate(item: item_params)
 
         expect(response.status).to eq 404
       end
@@ -210,7 +210,7 @@ RSpec.describe 'Items API' do
         delete "/api/v1/items/#{id}"
 
         expect(response.status).to eq 204
-        expect(response.body).to eq ""
+        expect(response.body).to eq ''
       end
     end
 
@@ -219,7 +219,7 @@ RSpec.describe 'Items API' do
 
   describe "item's merchant" do
     describe 'happy path' do
-      it "returns the merchant associated with an item" do
+      it 'returns the merchant associated with an item' do
         id = create(:item).id
         get "/api/v1/items/#{id}/merchant"
         merchant = JSON.parse(response.body, symbolize_names: true)
@@ -235,7 +235,7 @@ RSpec.describe 'Items API' do
 
     describe 'sad path' do
       it 'returns 404 if the item is not found' do
-        get "/api/v1/items/890123458937217456/merchant"
+        get '/api/v1/items/890123458937217456/merchant'
 
         expect(response.status).to eq 404
       end
