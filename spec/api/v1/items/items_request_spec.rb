@@ -88,7 +88,6 @@ RSpec.describe 'Items API' do
 
         headers = {"CONTENT_TYPE" => "application/json"}
         post '/api/v1/items', headers: headers, params: JSON.generate(item: item_params)
-
         created_item = Item.last
 
         expect(response.status).to eq 201
@@ -96,6 +95,58 @@ RSpec.describe 'Items API' do
         expect(created_item.description).to eq item_params[:description]
         expect(created_item.unit_price).to eq item_params[:unit_price].to_f
         expect(created_item.merchant_id).to eq merchant_id
+      end
+    end
+
+    describe 'sad path' do
+    end
+  end
+
+  describe 'update' do
+    describe 'happy path' do
+      it 'returns the updated item' do
+        id = create(:item).id
+        previous_name = Item.last.name
+        item_params = {
+          name: 'Key',
+          description: 'Use this to open a door',
+          unit_price: '100.0',
+        }
+        headers = {"CONTENT_TYPE" => "application/json"}
+        patch "/api/v1/items/#{id}", headers: headers, params: JSON.generate(item: item_params)
+        updated_item = Item.find_by(id: id)
+
+        expect(response.status).to eq 200
+        expect(updated_item.name).to_not eq previous_name
+        expect(updated_item.name).to eq 'Key'
+        expect(updated_item.description).to eq item_params[:description]
+        expect(updated_item.unit_price).to eq item_params[:unit_price].to_f
+      end
+    end
+
+    describe 'sad path' do
+    end
+  end
+
+  describe 'delete' do
+    describe 'happy path' do
+      it 'returns the deleted item' do
+        id = create(:item).id
+
+        expect(Item.count).to eq 1
+
+        delete "/api/v1/items/#{id}"
+
+        expect(response.status).to eq 200
+
+        deleted = JSON.parse(response.body, symbolize_names: true)
+        # binding.pry
+        expect(deleted).to have_key :data
+
+        expect(deleted[:data]).to have_key :id
+        expect(deleted[:data][:id].to_i).to eq id
+        expect(Item.count).to eq 0
+        expect{Item.find(id)}.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
 
