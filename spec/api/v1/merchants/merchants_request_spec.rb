@@ -25,23 +25,14 @@ RSpec.describe 'Merchants API' do
       end
     end
 
-    # describe 'sad path' do
-    #   it 'returns a JSON object with nil values' do
-    #     get '/api/v1/merchants'
+    describe 'sad path' do
+      it 'returns an empty collection if no merchants exist' do
+        get '/api/v1/merchants'
 
-    #     expect(response.status).to eq 404
-
-    #     merchants = JSON.parse(response.body, symbolize_names: true)
-
-    #     expect(merchants.count).to eq 0
-
-    #     expect(merchants.first).to have_key :id
-    #     expect(merchants.first[:id]).to be_nil
-
-    #     expect(merchants.first).to have_key :name
-    #     expect(merchants.first[:name]).to be_nil
-    #   end
-    # end
+        expect(response.status).to eq 200
+        expect(Merchant.count).to eq 0
+      end
+    end
   end
 
   describe 'show' do
@@ -63,6 +54,11 @@ RSpec.describe 'Merchants API' do
     end
 
     describe 'sad path' do
+      it 'returns 404 if the merchant is not found' do
+        get '/api/v1/merchants/980234980589347257'
+
+        expect(response.status).to eq 404
+      end
     end
   end
 
