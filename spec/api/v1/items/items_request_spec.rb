@@ -104,6 +104,8 @@ RSpec.describe 'Items API' do
     end
 
     describe 'sad path' do
+      it 'returns an error if any attributes are missing'
+      it 'ignores attributes that are not allowed'
     end
   end
 
@@ -130,6 +132,9 @@ RSpec.describe 'Items API' do
     end
 
     describe 'sad path' do
+      it 'something happens if no updates are made'
+      it 'ignores attributes that are not allowed'
+      it 'returns an error if the item cannot be found'
     end
   end
 
@@ -142,16 +147,8 @@ RSpec.describe 'Items API' do
 
         delete "/api/v1/items/#{id}"
 
-        expect(response.status).to eq 200
-
-        deleted = JSON.parse(response.body, symbolize_names: true)
-        # binding.pry
-        expect(deleted).to have_key :data
-
-        expect(deleted[:data]).to have_key :id
-        expect(deleted[:data][:id].to_i).to eq id
-        expect(Item.count).to eq 0
-        expect{Item.find(id)}.to raise_error(ActiveRecord::RecordNotFound)
+        expect(response.status).to eq 204
+        expect(response.body).to eq ""
       end
     end
 
