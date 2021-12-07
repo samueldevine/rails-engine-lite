@@ -214,7 +214,31 @@ RSpec.describe 'Items API' do
       end
     end
 
+    describe 'sad path'
+  end
+
+  describe "item's merchant" do
+    describe 'happy path' do
+      it "returns the merchant associated with an item" do
+        id = create(:item).id
+        get "/api/v1/items/#{id}/merchant"
+        merchant = JSON.parse(response.body, symbolize_names: true)
+
+        expect(response.status).to eq 200
+        expect(merchant).to have_key :data
+        expect(merchant[:data]).to have_key :attributes
+
+        expect(merchant[:data][:attributes]).to have_key :name
+        expect(merchant[:data][:attributes][:name]).to be_a String
+      end
+    end
+
     describe 'sad path' do
+      it 'returns 404 if the item is not found' do
+        get "/api/v1/items/890123458937217456/merchant"
+
+        expect(response.status).to eq 404
+      end
     end
   end
 end
