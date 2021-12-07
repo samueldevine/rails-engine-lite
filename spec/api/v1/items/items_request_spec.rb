@@ -90,7 +90,6 @@ RSpec.describe 'Items API' do
                         unit_price: '100.0',
                         merchant_id: merchant_id
                       }
-
         headers = {"CONTENT_TYPE" => "application/json"}
         post '/api/v1/items', headers: headers, params: JSON.generate(item: item_params)
         created_item = Item.last
@@ -104,8 +103,35 @@ RSpec.describe 'Items API' do
     end
 
     describe 'sad path' do
-      it 'returns an error if any attributes are missing'
-      it 'ignores attributes that are not allowed'
+      it 'returns an error if any attributes are missing' do
+        merchant_id = create(:merchant).id
+        item_params = {
+                        name: 'Key',
+                        description: 'Use this to open a door',
+                        merchant_id: merchant_id
+                      }
+        headers = {"CONTENT_TYPE" => "application/json"}
+        post '/api/v1/items', headers: headers, params: JSON.generate(item: item_params)
+
+        expect(response.status).to eq 400
+      end
+
+      it 'ignores attributes that are not allowed' do
+        merchant_id = create(:merchant).id
+        item_params = {
+                        name: 'Key',
+                        description: 'Use this to open a door',
+                        unit_price: '100.0',
+                        merchant_id: merchant_id,
+                        evil_hacker_params: 'l33t_h4ck3r_c0d3 u got pwned!!!!'
+                      }
+        headers = {"CONTENT_TYPE" => "application/json"}
+        post '/api/v1/items', headers: headers, params: JSON.generate(item: item_params)
+        body = JSON.parse(response.body, symbolize_names: true)
+
+        expect(response.status).to eq 201
+        expect(body[:data][:attributes]).to_not have_key :evil_hacker_params
+      end
     end
   end
 
@@ -132,9 +158,45 @@ RSpec.describe 'Items API' do
     end
 
     describe 'sad path' do
-      it 'something happens if no updates are made'
-      it 'ignores attributes that are not allowed'
-      it 'returns an error if the item cannot be found'
+      it 'returns the item if no updates are made' do
+        item = create(:item)
+        previous_name = item.name
+        headers = {"CONTENT_TYPE" => "application/json"}
+        patch "/api/v1/items/#{item.id}", headers: headers, params: JSON.generate(item: { name: item.name })
+
+        expect(response.status).to eq 200
+        expect(Item.find(item.id).name).to eq previous_name
+      end
+
+      it 'ignores attributes that are not allowed' do
+        id = create(:item).id
+        previous_name = Item.last.name
+        item_params = {
+          name: 'Key',
+          description: 'Use this to open a door',
+          unit_price: '100.0',
+          evil_hacker_params: 'l33t_h4ck3r_c0d3 u got pwned!!!!'
+        }
+        headers = {"CONTENT_TYPE" => "application/json"}
+        patch "/api/v1/items/#{id}", headers: headers, params: JSON.generate(item: item_params)
+        body = JSON.parse(response.body, symbolize_names: true)
+
+        expect(response.status).to eq 200
+        expect(body[:data][:attributes]).to_not have_key :evil_hacker_params
+      end
+
+      it 'returns 404 if the item cannot be found' do
+        item_params = {
+          name: 'Key',
+          description: 'Use this to open a door',
+          unit_price: '100.0',
+          evil_hacker_params: 'l33t_h4ck3r_c0d3 u got pwned!!!!'
+        }
+        headers = {"CONTENT_TYPE" => "application/json"}
+        patch "/api/v1/items/89012458942389045", headers: headers, params: JSON.generate(item: item_params)
+
+        expect(response.status).to eq 404
+      end
     end
   end
 
