@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Merchants API' do
-  describe 'Index' do
+  describe 'index' do
     describe 'happy path' do
       it 'returns a JSON object containing all merchants' do
         create_list(:merchant, 3)
@@ -44,7 +44,7 @@ RSpec.describe 'Merchants API' do
     # end
   end
 
-  describe 'Show' do
+  describe 'show' do
     describe 'happy path' do
       it 'returns a single merchant' do
         id = create(:merchant).id
@@ -66,7 +66,7 @@ RSpec.describe 'Merchants API' do
     end
   end
 
-  describe 'Items' do
+  describe "merchant's items" do
     describe 'happy path' do
       it "returns all of a single merchant's items" do
         id = merchant_with_items.id
