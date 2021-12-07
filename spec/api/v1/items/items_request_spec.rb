@@ -5,13 +5,10 @@ RSpec.describe 'Items API' do
     describe 'happy path' do
       it 'returns a JSON object containing all items' do
         create_list(:item, 3)
-
         get '/api/v1/items'
-
-        expect(response.status).to eq 200
-
         items = JSON.parse(response.body, symbolize_names: true)
 
+        expect(response.status).to eq 200
         expect(items).to have_key :data
         expect(items[:data].count).to eq 3
 
@@ -35,6 +32,14 @@ RSpec.describe 'Items API' do
     end
 
     describe 'sad path' do
+      it 'returns an empty array if no items are found' do
+        get '/api/v1/items'
+        items = JSON.parse(response.body, symbolize_names: true)
+
+        expect(response.status).to eq 200
+        expect(items).to have_key :data
+        expect(items[:data]).to be_empty
+      end
     end
   end
 
