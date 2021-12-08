@@ -1,0 +1,35 @@
+require 'rails_helper'
+
+RSpec.describe 'Merchant search' do
+  describe 'find one' do
+    describe 'happy path' do
+      it 'returns a single merchant that matches the search result' do
+        merchant = Merchant.create!(name: 'Denver Pizza Co.')
+
+        query = "pizza"
+        get "/api/v1/merchants/find?name=#{query}"
+        result = JSON.parse(response.body, symbolize_names: true)
+
+        expect(response.status).to eq 200
+        expect(result).to have_key :data
+        expect(result[:data][:attributes][:name]).to eq "#{merchant[:name]}"
+      end
+
+      it 'returns the first merchant in alphabetical order if there are multiple matches' do
+        ph = Merchant.create!(name: 'Pizza Hut')
+        dpc = Merchant.create!(name: 'Denver Pizza Co.')
+
+        query = "pizza"
+        get "/api/v1/merchants/find?name=#{query}"
+        result = JSON.parse(response.body, symbolize_names: true)
+
+        expect(response.status).to eq 200
+        expect(result).to have_key :data
+        expect(result[:data][:attributes][:name]).to eq "#{dpc[:name]}"
+      end
+    end
+
+    describe 'sad path' do
+    end
+  end
+end
