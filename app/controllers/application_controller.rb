@@ -5,10 +5,10 @@ class ApplicationController < ActionController::API
   private
 
   def handle_error_404(e)
-    render json: { error: e.to_s }, status: :not_found
+    render json: { errors: { details: e.to_s }}, status: :not_found
   end
 
   def handle_error_400(e)
-    render json: { error: e.to_s }, status: :bad_request
+    render json: { errors: { details: e.to_s }}, status: :bad_request
   end
 end
