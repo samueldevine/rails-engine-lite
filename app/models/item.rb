@@ -8,4 +8,20 @@ class Item < ApplicationRecord
     where('name ILIKE ?', "%#{query}%")
       .order(:name)
   end
+
+  def self.find_all_price_above(min_price)
+    where('unit_price > ?', min_price)
+      .order(:name)
+  end
+
+  def self.find_all_price_below(max_price)
+    where('unit_price < ?', max_price)
+      .order(:name)
+  end
+
+  def self.find_all_price_between(min_price, max_price)
+    where('unit_price > ?', min_price)
+      .where('unit_price < ?', max_price)
+      .order(:name)
+  end
 end

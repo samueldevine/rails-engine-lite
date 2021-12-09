@@ -42,6 +42,24 @@ RSpec.describe 'Merchant search' do
         expect(result).to have_key :data
         expect(result[:data]).to eq({})
       end
+
+      it 'returns 400 if no params are given' do
+        get '/api/v1/merchants/find'
+        result = JSON.parse(response.body, symbolize_names: true)
+
+        expect(response.status).to eq 400
+        expect(result).to have_key :errors
+        expect(result[:errors][:details]).to eq 'No params given'
+      end
+
+      it 'returns 400 if there are empty params' do
+        get '/api/v1/merchants/find?name='
+        result = JSON.parse(response.body, symbolize_names: true)
+
+        expect(response.status).to eq 400
+        expect(result).to have_key :errors
+        expect(result[:errors][:details]).to eq 'Search params cannot be empty'
+      end
     end
   end
 end
