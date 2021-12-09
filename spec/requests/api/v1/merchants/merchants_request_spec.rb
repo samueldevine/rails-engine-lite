@@ -49,9 +49,12 @@ RSpec.describe 'Merchants API' do
 
     describe 'sad path' do
       it 'returns 404 if the merchant is not found' do
-        get '/api/v1/merchants/980234980589347257'
+        get '/api/v1/merchants/1'
+        result = JSON.parse(response.body, symbolize_names: true)
 
         expect(response.status).to eq 404
+        expect(result).to have_key :errors
+        expect(result[:errors][:details]).to eq "Couldn't find Merchant with 'id'=1"
       end
     end
   end

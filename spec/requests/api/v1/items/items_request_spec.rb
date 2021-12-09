@@ -59,6 +59,14 @@ RSpec.describe 'Items API' do
     end
 
     describe 'sad path' do
+      it 'returns 404 and an error if the item cannot be found' do
+        get '/api/v1/items/1'
+        result = JSON.parse(response.body, symbolize_names: true)
+
+        expect(response.status).to eq 404
+        expect(result).to have_key :errors
+        expect(result[:errors][:details]).to eq "Couldn't find Item with 'id'=1"
+      end
     end
   end
 
