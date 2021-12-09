@@ -50,7 +50,6 @@ RSpec.describe 'Items API' do
 
         expect(data).to have_key :attributes
 
-
         expect(data[:id]).to be_a String
         expect(data[:attributes][:name]).to be_a String
         expect(data[:attributes][:description]).to be_a String
@@ -188,7 +187,7 @@ RSpec.describe 'Items API' do
           name: 'Key',
           description: 'Use this to open a door',
           unit_price: '100.0',
-          merchant_id: 20938457123048957
+          merchant_id: 20_938_457_123_048_957
         }
         headers = { 'CONTENT_TYPE' => 'application/json' }
         patch "/api/v1/items/#{id}", headers: headers, params: JSON.generate(item: item_params)

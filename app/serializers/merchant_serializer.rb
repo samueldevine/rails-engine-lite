@@ -4,6 +4,6 @@ class MerchantSerializer
   attributes :name
 
   def self.not_found
-    { data: {}}
+    { data: {} }
   end
 end

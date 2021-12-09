@@ -9,7 +9,7 @@ RSpec.describe 'Items search' do
         item_2 = merchant.items.create!(name: 'Kokiri Tunic', description: 'green', unit_price: '399.99')
         item_3 = merchant.items.create!(name: 'Goron Tunic', description: 'red', unit_price: '550.99')
 
-        query = "tunic"
+        query = 'tunic'
         get "/api/v1/items/find_all?name=#{query}"
         result = JSON.parse(response.body, symbolize_names: true)
 
@@ -25,7 +25,7 @@ RSpec.describe 'Items search' do
         merchant = Merchant.create!(name: 'Kilton')
         item_1 = merchant.items.create!(name: 'Zora Tunic', description: 'blue', unit_price: '600')
 
-        query = "goron"
+        query = 'goron'
         get "/api/v1/items/find_all?name=#{query}"
         result = JSON.parse(response.body, symbolize_names: true)
 

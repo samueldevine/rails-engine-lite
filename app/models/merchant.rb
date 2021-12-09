@@ -5,7 +5,7 @@ class Merchant < ApplicationRecord
 
   def self.find_one(query)
     where('name ILIKE ?', "%#{query}%")
-    .order(:name)
-    .first
+      .order(:name)
+      .first
   end
 end

@@ -6,6 +6,6 @@ class Item < ApplicationRecord
 
   def self.find_all_by_name(query)
     where('name ILIKE ?', "%#{query}%")
-    .order(:name)
+      .order(:name)
   end
 end

@@ -6,26 +6,26 @@ RSpec.describe 'Merchant search' do
       it 'returns a single merchant that matches the search result' do
         merchant = Merchant.create!(name: 'Denver Pizza Co.')
 
-        query = "pizza"
+        query = 'pizza'
         get "/api/v1/merchants/find?name=#{query}"
         result = JSON.parse(response.body, symbolize_names: true)
 
         expect(response.status).to eq 200
         expect(result).to have_key :data
-        expect(result[:data][:attributes][:name]).to eq "#{merchant[:name]}"
+        expect(result[:data][:attributes][:name]).to eq (merchant[:name]).to_s
       end
 
       it 'returns the first merchant alphabetically if there are multiple matches' do
         ph = Merchant.create!(name: 'Pizza Hut')
         dpc = Merchant.create!(name: 'Denver Pizza Co.')
 
-        query = "pizza"
+        query = 'pizza'
         get "/api/v1/merchants/find?name=#{query}"
         result = JSON.parse(response.body, symbolize_names: true)
 
         expect(response.status).to eq 200
         expect(result).to have_key :data
-        expect(result[:data][:attributes][:name]).to eq "#{dpc[:name]}"
+        expect(result[:data][:attributes][:name]).to eq (dpc[:name]).to_s
       end
     end
 
@@ -34,7 +34,7 @@ RSpec.describe 'Merchant search' do
         ph = Merchant.create!(name: 'Pizza Hut')
         dpc = Merchant.create!(name: 'Denver Pizza Co.')
 
-        query = "noodles"
+        query = 'noodles'
         get "/api/v1/merchants/find?name=#{query}"
         result = JSON.parse(response.body, symbolize_names: true)
 
