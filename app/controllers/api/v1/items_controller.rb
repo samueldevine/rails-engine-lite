@@ -14,8 +14,12 @@ class Api::V1::ItemsController < ApplicationController
 
   def update
     item = Item.find(params[:id])
-    item.update(item_params)
-    render json: ItemSerializer.new(item)
+    if Merchant.exists?(item_params[:merchant_id]) || !item_params[:merchant_id]
+      item.update(item_params)
+      render json: ItemSerializer.new(item)
+    else
+      render json: { errors: { details: 'Merchant ID does not exist'}}, status: 400
+    end
   end
 
   def destroy

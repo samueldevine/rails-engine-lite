@@ -180,6 +180,21 @@ RSpec.describe 'Items API' do
 
         expect(response.status).to eq 404
       end
+
+      it 'returns 400 if the merchant id is bad' do
+        id = create(:item).id
+        previous_name = Item.last.name
+        item_params = {
+          name: 'Key',
+          description: 'Use this to open a door',
+          unit_price: '100.0',
+          merchant_id: 20938457123048957
+        }
+        headers = { 'CONTENT_TYPE' => 'application/json' }
+        patch "/api/v1/items/#{id}", headers: headers, params: JSON.generate(item: item_params)
+
+        expect(response.status).to eq 400
+      end
     end
   end
 

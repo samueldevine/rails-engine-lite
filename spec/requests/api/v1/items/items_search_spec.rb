@@ -18,14 +18,6 @@ RSpec.describe 'Items search' do
         expect(result[:data]).to be_an Array
         expect(result[:data].first[:attributes][:name]).to eq item_3.name
       end
-
-      # it 'returns the first merchant alphabetically if there are multiple matches' do
-
-
-      #   expect(response.status).to eq 200
-      #   expect(result).to have_key :data
-      #   expect(result[:data][:attributes][:name]).to eq "#{dpc[:name]}"
-      # end
     end
 
     describe 'sad path' do
