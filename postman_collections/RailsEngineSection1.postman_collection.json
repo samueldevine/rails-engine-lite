@@ -1,4 +1,4 @@
-{
+{[
 	"info": {
 		"_postman_id": "1d0f75c2-4c1c-49b9-896f-e9a4aa295a66",
 		"name": "Rails Engine Lite, Part 1",
@@ -1124,4 +1124,4 @@
 			]
 		}
 	]
-}
+]}
